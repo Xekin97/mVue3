@@ -42,7 +42,6 @@
         | 查询订阅链上 this.dataNotifyChain 的该 key 项
         | 调用其回调方法 即 update 方法
         | update 方法
-        
           | 数据变更后 重新调用 createElement 结合新数据产生新节点
           | 判断当前节点是否有父节点， 若有则用 replaceChild 置换父节点的子节点，若无则直接进行替换
           | 页面产生更新
