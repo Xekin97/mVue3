@@ -30,6 +30,7 @@
    
    ① 依赖收集 进入 collect 方法
         collect 方法
+        
         | 判断 this.collected 中是否已收集该属性，若已收集则其订阅信息已经存储
         | 若无，则调用 this.$watch(key, this.update.bind(this)) 对该属性进行订阅
         | 若该值为对象类，则进行深度收集，通过递归返回 new proxy，传入上层的 key 值对每个属性进行订阅
@@ -37,9 +38,11 @@
         
    ② 属性 set 将数据中 obj[key] 设置为 value，调用 this.notifyDataChange
         notifyDataChange 方法
+        
         | 查询订阅链上 this.dataNotifyChain 的该 key 项
         | 调用其回调方法 即 update 方法
         | update 方法
+        
           | 数据变更后 重新调用 createElement 结合新数据产生新节点
           | 判断当前节点是否有父节点， 若有则用 replaceChild 置换父节点的子节点，若无则直接进行替换
           | 页面产生更新
