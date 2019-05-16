@@ -1,6 +1,12 @@
 # mVue
   简单仿实现 Vue3 + 测试框架 Karma + jasmine
   
+  Vue3
+  
+  Vue 从 2.x 到 3.x 最大的变化就是撇弃了先前使用 `Object.defineProperty` 对属性的 `set` 和 `get` 进行劫持的手段，而是用了 ES6 的新规范 `Proxy` 对象劫持，这一举动表示 Vue 将彻底不支持 IE 浏览器，即使使用 babel-polyfill 也无法完全转换 `Proxy` 对象. Vue2.x 版本中，vue 无法检测数组长度变化，而通过重写 Array 的 8 个方法，对于特殊变化，用户只能通过使用 `this.$set` 方法，该方法就是当场使用 `Object.defineProperty` 直接对传入的数组对象进行劫持。而采用 `Proxy` 的方式进行对象劫持也完美解决了对数组和对象内部数据检测的问题，对比前者而言在性能上提高了不少，也降低了用户自己操作代码的空间。
+  
+  所以这里尝试使用 `Proxy` 的模式简单实现一下 Vue3。
+  
 ## 原理笔记：
    1.用 ES6 proxy 做对象劫持，劫持当前 this 即 vm 对象并返回 proxy
 
