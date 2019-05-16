@@ -1,0 +1,9 @@
+{
+    "search.exclude": {
+        "**/bower_components": true,
+        "**/node_modules": false
+    },
+    "vscode_custom_css.imports": [
+        "file:///C:/Users/v_jianzhuo/synthwave84.css"
+    ]
+}
