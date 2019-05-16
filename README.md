@@ -27,7 +27,8 @@
    1. 属性更改 如 vm.a.b = 2
      
    2. 触发 proxy 拦截的 get 方法
-     ① 依赖收集 进入 collect 方法
+   
+   ① 依赖收集 进入 collect 方法
         collect 方法
         | 判断 this.collected 中是否已收集该属性，若已收集则其订阅信息已经存储
         | 若无，则调用 this.$watch(key, this.update.bind(this)) 对该属性进行订阅
