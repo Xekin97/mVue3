@@ -5,12 +5,10 @@
  * @param {array|string} children 
  */
 
-export default function VNode (tag, data, children) {
+export default function VNode (tag, data, children, componentOptions, componentInstance) {
     this.tag = tag
     this.data = data
     this.children = children
-}
-
-export function createEmptyVNode (val) {
-    return new VNode(void 0, void 0, val)
+    this.componentOptions = componentOptions
+    this.componentInstance = componentInstance
 }
