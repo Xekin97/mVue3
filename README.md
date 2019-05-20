@@ -8,15 +8,28 @@
   所以这里尝试使用 `Proxy` 的模式简单实现一下 Vue3。
   
 ## 原理笔记：
-   1.用 ES6 proxy 做对象劫持，劫持当前 this 即 vm 对象并返回 proxy
+   1.模块区分
+      | dep.js -- 依赖收集模块，负责 deep collect dependence, 对应 Vue2.x 中的 dep.js
+      | index.js -- 主 Vue 模块
+      | proxy.js -- proxy 创建模块，负责 proxy 对象劫持的模块，
+      | vnode.js -- 虚拟节点构造器，暂时用来保存虚拟节点的数据(tag, data, children, 组件的options和组件实例)
+      | watcher.js -- 监听模块，包括 Watcher 和 ComputedWatcher，只负责存储 Watch 的对象信息和相应回调，
+                      主要的 observer 仍旧在 index 主模块执行监听
+      | util.js -- 常用工具函数
 
-   ***2.用 $watch 和 notifyDataChange 方法实现一个简单的订阅模式，将订阅信息存入 dataNotifyChain 对象中，当调用对应的属性 set 时，触发 notifyDataChange 调用 dataNotifyChain 对象中对应的 key 的回调方法，通过 $watch 和 update 实现一系列 dom 节点替换和事件回调触发
+   2.用 ES6 proxy 做对象劫持，监听调用 vm 对象的过程，并在其中插入自己的方法，实现对应的功能
+   
+   ~~3.用 $watch 和 notifyDataChange 方法实现一个简单的订阅模式，将订阅信息存入 dataNotifyChain 对象中，当调用对应的属性 set 时，触发 notifyDataChange 调用 dataNotifyChain 对象中对应的 key 的回调方法，通过 $watch 和 update 实现一系列 dom 节点替换和事件回调触发~~
+   
+   3. 调用 `$watch` 中将对应的 key 实例化为一个 `Dep` 对象, 用对象的 `addSub` 方法，存入 `new Watcher(this.proxy, key, cb)`
+      `Dep` 对象和 `Watcher` 对象配合，实现订阅模式，当属性被调用时，就会触发 `notifyChange` 方法调用对应的 `Dep` 对象的 `notify` 方法
+      触发 `Watcher` 中的回调。
+   
+   4. `setTarget` 和 `clearTarget` 
+   
+   5.mounted 触发首次 update 经 render 后生成 vnode 再通过 createDom 生成 dom 赋值给 $el(虚拟 dom 对象)
 
-   3.collect 方法完成依赖收集 完成的收集存入 this.collected 对象中，在调用 this 的 get 方法时，会收集当前属性的所有依赖(deep)
-
-   4.mounted 触发首次 update 经 render 后生成 vnode 再通过 createDom 生成 dom 赋值给 $el(虚拟 dom 对象)
-
-   5.render 创建 vnode，用 createElement 暂存数据，节点属性为 vnode.data.attrs, 子节点用 Array 或者 string 承载，多个节点用 dom Array 的方式渲染，若是文本节点，则直接替换element.textContent 值，监听事件直接用 element.addEventListener
+   6.render 创建 vnode，用 createElement 暂存数据，节点属性为 vnode.data.attrs, 子节点用 Array 或者 string 承载，多个节点用 dom Array 的方式渲染，若是文本节点，则直接替换element.textContent 值，监听事件直接用 element.addEventListener
 
 ## Ⅰ.Initialize
    1. 实例化 options 传入配置 options 中例如有 data () { return { a:{b:1} } }
