@@ -9,14 +9,15 @@
   
 ## 原理笔记：
    1.模块区分
-   `  | dep.js -- 依赖收集模块，负责 deep collect dependence, 对应 Vue2.x 中的 dep.js
+   ```
+      | dep.js -- 依赖收集模块，负责 deep collect dependence, 对应 Vue2.x 中的 dep.js
       | index.js -- 主 Vue 模块
       | proxy.js -- proxy 创建模块，负责 proxy 对象劫持的模块，
       | vnode.js -- 虚拟节点构造器，暂时用来保存虚拟节点的数据(tag, data, children, 组件的options和组件实例)
       | watcher.js -- 监听模块，包括 Watcher 和 ComputedWatcher，只负责存储 Watch 的对象信息和相应回调，
                       主要的 observer 仍旧在 index 主模块执行监听
       | util.js -- 常用工具函数`
-
+   ```
    2.用 ES6 proxy 做对象劫持，监听调用 vm 对象的过程，并在其中插入自己的方法，实现对应的功能
    
    ~~3.用 $watch 和 notifyDataChange 方法实现一个简单的订阅模式，将订阅信息存入 dataNotifyChain 对象中，当调用对应的属性 set 时，触发 notifyDataChange 调用 dataNotifyChain 对象中对应的 key 的回调方法，通过 $watch 和 update 实现一系列 dom 节点替换和事件回调触发~~
@@ -50,7 +51,7 @@
    1. 属性更改 如 vm.a.b = 2
      
    2. 触发 proxy 拦截的 get 方法
-   
+   ```
     ① 依赖收集 进入 collect 方法
         collect 方法
         
@@ -68,7 +69,7 @@
           | 数据变更后 重新调用 createElement 结合新数据产生新节点
           | 判断当前节点是否有父节点， 若有则用 replaceChild 置换父节点的子节点，若无则直接进行替换
           | 页面产生更新
-
+   ```
 ## III. 组件设计实现
    1. props实现
      ① 在属性 get 方法调用时，默认先取 props 的数据
