@@ -9,13 +9,13 @@
   
 ## 原理笔记：
    1.模块区分
-        | dep.js -- 依赖收集模块，负责 deep collect dependence, 对应 Vue2.x 中的 dep.js
-        | index.js -- 主 Vue 模块
-        | proxy.js -- proxy 创建模块，负责 proxy 对象劫持的模块，
-        | vnode.js -- 虚拟节点构造器，暂时用来保存虚拟节点的数据(tag, data, children, 组件的options和组件实例)
-        | watcher.js -- 监听模块，包括 Watcher 和 ComputedWatcher，只负责存储 Watch 的对象信息和相应回调，
-                        主要的 observer 仍旧在 index 主模块执行监听
-        | util.js -- 常用工具函数
+   `  | dep.js -- 依赖收集模块，负责 deep collect dependence, 对应 Vue2.x 中的 dep.js
+      | index.js -- 主 Vue 模块
+      | proxy.js -- proxy 创建模块，负责 proxy 对象劫持的模块，
+      | vnode.js -- 虚拟节点构造器，暂时用来保存虚拟节点的数据(tag, data, children, 组件的options和组件实例)
+      | watcher.js -- 监听模块，包括 Watcher 和 ComputedWatcher，只负责存储 Watch 的对象信息和相应回调，
+                      主要的 observer 仍旧在 index 主模块执行监听
+      | util.js -- 常用工具函数`
 
    2.用 ES6 proxy 做对象劫持，监听调用 vm 对象的过程，并在其中插入自己的方法，实现对应的功能
    
