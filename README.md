@@ -10,7 +10,7 @@
 ## 原理笔记：
    1.用 ES6 proxy 做对象劫持，劫持当前 this 即 vm 对象并返回 proxy
 
-   2.用 $watch 和 notifyDataChange 方法实现一个简单的订阅模式，将订阅信息存入 dataNotifyChain 对象中，当调用对应的属性 set 时，触发 notifyDataChange 调用 dataNotifyChain 对象中对应的 key 的回调方法，通过 $watch 和 update 实现一系列 dom 节点替换和事件回调触发
+   ***2.用 $watch 和 notifyDataChange 方法实现一个简单的订阅模式，将订阅信息存入 dataNotifyChain 对象中，当调用对应的属性 set 时，触发 notifyDataChange 调用 dataNotifyChain 对象中对应的 key 的回调方法，通过 $watch 和 update 实现一系列 dom 节点替换和事件回调触发
 
    3.collect 方法完成依赖收集 完成的收集存入 this.collected 对象中，在调用 this 的 get 方法时，会收集当前属性的所有依赖(deep)
 
@@ -23,9 +23,13 @@
 
    2. 初始化 props
 
-   3. 初始化 proxy => this.initDataProxy()
+   3. 初始化 proxy => createProxy()
 
-   4. 初始化 watch => this.initWatch() 设置 this.dataNotifyChain = {}
+   4. 初始化 watch => 
+            this.initWatch() 获取 vue 实例中的 watch 对象执行依赖收集
+                 判断 watch 目标是否在 data 或者 computed 中
+                 若在 data 中，则调用 this.$watch 执行依赖收集，将
+            this.initWatcher() 设置 this.deps = {}
 
    5. 返回 this.proxy
 
